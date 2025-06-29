@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
+axios.defaults.baseURL = 'https://expensetracker-ogdu.onrender.com';
+
 const BASE_URL = 'https://expensetracker-ogdu.onrender.com';
 
 function App() {
