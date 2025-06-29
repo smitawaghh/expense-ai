@@ -4,9 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
+// ✅ Set axios base URL globally (use this ONLY)
 axios.defaults.baseURL = 'https://expensetracker-ogdu.onrender.com';
-
-const BASE_URL = 'https://expensetracker-ogdu.onrender.com';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -25,7 +24,7 @@ function App() {
   }, []);
 
   const fetchExpenses = () => {
-    axios.get(`${BASE_URL}/api/expenses`)
+    axios.get('/api/expenses')
       .then((res) => setExpenses(res.data))
       .catch(() => toast.error('Failed to fetch expenses'));
   };
@@ -38,7 +37,7 @@ function App() {
     e.preventDefault();
 
     if (editId) {
-      axios.put(`${BASE_URL}/api/expenses/${editId}`, form)
+      axios.put(/api/expenses/${editId}, form)
         .then(() => {
           resetForm();
           fetchExpenses();
@@ -46,7 +45,7 @@ function App() {
         })
         .catch(() => toast.error('Error updating expense'));
     } else {
-      axios.post(`${BASE_URL}/api/expenses`, form)
+      axios.post('/api/expenses', form)
         .then(() => {
           resetForm();
           fetchExpenses();
@@ -68,7 +67,7 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`${BASE_URL}/api/expenses/${id}`)
+    axios.delete(/api/expenses/${id})
       .then(() => {
         fetchExpenses();
         toast.success('Expense deleted');
@@ -101,6 +100,7 @@ function App() {
       <h1>Expense Tracker</h1>
       <h2>Total Spent: ₹{total}</h2>
 
+      {/* Category Filter Dropdown */}
       <div className="filter">
         <label>Filter by Category: </label>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
@@ -116,6 +116,7 @@ function App() {
         )}
       </div>
 
+      {/* Form Section */}
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <input type="text" name="title" placeholder="Title" value={form.title} onChange={handleChange} required /><br />
@@ -128,6 +129,7 @@ function App() {
         </form>
       </div>
 
+      {/* Expense List */}
       {filteredExpenses.length === 0 ? (
         <p>No expenses yet.</p>
       ) : (
