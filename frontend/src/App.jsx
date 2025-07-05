@@ -97,6 +97,8 @@ function App() {
 
   return (
     <div className="container">
+    <img src="./logo.png" alt = "logo"
+    style={{width:'120 px', margin:'0 auto', display:'block'}}/>
       <h1>Expense Tracker</h1>
       <h2>Total Spent: ₹{total}</h2>
 
