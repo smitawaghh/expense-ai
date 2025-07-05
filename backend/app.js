@@ -3,87 +3,91 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+// Load environment variables
 dotenv.config();
 
+// Check MongoDB URI
 if (!process.env.MONGO_URI) {
-  console.error("❌ Error: MONGO_URI not defined in .env");
+  console.error('❌ MONGO_URI not found in .env file');
   process.exit(1);
 }
 
+// Initialize app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB Connection
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected..."))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+.then(() => console.log('✅ MongoDB connected'))
+.catch((err) => {
+  console.error('❌ MongoDB connection error:', err.message);
+  process.exit(1);
+});
 
-// ✅ Schema & Model
+// Mongoose Schema and Model
 const expenseSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  amount: { type: Number, required: true },
-  category: { type: String, required: true },
-  paidTo: { type: String, required: true },
-  date: { type: Date, default: Date.now }
+  title: String,
+  amount: Number,
+  category: String,
+  paidTo: String,
+  date: Date
 });
 
-const Expense = mongoose.model("Expense", expenseSchema);
+const Expense = mongoose.model('Expense', expenseSchema);
 
-// ✅ Test Route
+// Test route to confirm backend is working
 app.get('/', (req, res) => {
-  res.send('✅ Backend is working!');
+  res.send('✅ Backend is working');
 });
 
-// ✅ GET all expenses
+// API Routes
 app.get('/api/expenses', async (req, res) => {
   try {
-    const expenses = await Expense.find();
+    const expenses = await Expense.find().sort({ date: -1 });
     res.json(expenses);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching expenses', error: err.message });
+    res.status(500).json({ message: 'Failed to fetch expenses', error: err.message });
   }
 });
 
-// ✅ POST add new expense
 app.post('/api/expenses', async (req, res) => {
   try {
     const newExpense = new Expense(req.body);
-    const saved = await newExpense.save();
-    res.status(201).json(saved);
+    const savedExpense = await newExpense.save();
+    res.status(201).json(savedExpense);
   } catch (err) {
-    res.status(400).json({ message: 'Error adding expense', error: err.message });
+    res.status(400).json({ message: 'Failed to add expense', error: err.message });
   }
 });
 
-// ✅ PUT update expense
 app.put('/api/expenses/:id', async (req, res) => {
   try {
-    const updated = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updated) return res.status(404).json({ message: 'Expense not found' });
-    res.json(updated);
+    const updatedExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedExpense) return res.status(404).json({ message: 'Expense not found' });
+    res.json(updatedExpense);
   } catch (err) {
-    res.status(400).json({ message: 'Error updating expense', error: err.message });
+    res.status(400).json({ message: 'Failed to update expense', error: err.message });
   }
 });
 
-// ✅ DELETE expense
 app.delete('/api/expenses/:id', async (req, res) => {
   try {
-    const deleted = await Expense.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'Expense not found' });
+    const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
+    if (!deletedExpense) return res.status(404).json({ message: 'Expense not found' });
     res.json({ message: 'Expense deleted' });
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting expense', error: err.message });
+    res.status(500).json({ message: 'Failed to delete expense', error: err.message });
   }
 });
 
-// ✅ Server Listener
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
