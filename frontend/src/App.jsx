@@ -37,7 +37,7 @@ function App() {
     e.preventDefault();
 
     if (editId) {
-      axios.put(/api/expenses/${editId}, form)
+      axios.put(`/api/expenses/${editId}`, form)
         .then(() => {
           resetForm();
           fetchExpenses();
@@ -67,7 +67,7 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    axios.delete(/api/expenses/${id})
+    axios.delete(`/api/expenses/${id}`)
       .then(() => {
         fetchExpenses();
         toast.success('Expense deleted');
