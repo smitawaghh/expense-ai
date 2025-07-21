@@ -1,10 +1,12 @@
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+
 // Load environment variables
-dotenv.config();
+require('dotenv').config();
 
 // Check MongoDB URI
 if (!process.env.MONGO_URI) {
@@ -86,6 +88,8 @@ app.delete('/api/expenses/:id', async (req, res) => {
     res.status(500).json({ message: 'Failed to delete expense', error: err.message });
   }
 });
+
+
 
 // Start server
 app.listen(PORT, () => {

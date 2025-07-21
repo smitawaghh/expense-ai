@@ -1,6 +1,5 @@
-// src/Signup.jsx
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,8 +11,13 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert('Signup successful!');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // 🔔 Send verification email
+      await sendEmailVerification(user);
+
+      alert('Signup successful! A verification email has been sent to your inbox.');
       navigate('/login');
     } catch (error) {
       alert(error.message);
@@ -32,11 +36,11 @@ const Signup = () => {
         />
         <input
           type="password"
-          placeholder="Password (6+ chars)"
+          placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Create Account</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );

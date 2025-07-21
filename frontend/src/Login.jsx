@@ -1,8 +1,7 @@
-// src/Login.jsx
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from './firebase-config';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,12 +10,21 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        alert('Please verify your email before logging in. A verification link has been sent again.');
+        await sendEmailVerification(user); // ✅ Resend verification email
+        return;
+      }
+
       alert('Login successful!');
       navigate('/');
     } catch (error) {
-      alert(error.message);
+      alert(`Login failed: ${error.message}`); // ✅ Fixed template string syntax
     }
   };
 
@@ -27,17 +35,26 @@ const Login = () => {
         <input
           type="email"
           placeholder="Email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
         <button type="submit">Login</button>
       </form>
+
+      <p>
+        Don't have an account?{' '}
+        <Link to="/signup" style={{ color: 'blue' }}>Sign Up</Link>
+      </p>
     </div>
   );
 };
