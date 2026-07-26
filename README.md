@@ -76,3 +76,6 @@ See [`backend/.env.example`](backend/.env.example). Only **one** AI provider key
 ---
 
 Built by **Smita Wagh** — [GitHub](https://github.com/smitawaghh) · [LinkedIn](https://linkedin.com/in/smitawaghh)
+
+>>>>>>> 
+>>>>>>> 10ad7203952d0e43ff77127385ad44306b645a2e
