@@ -1,16 +1,27 @@
-<<<<<<< HEAD
-# React + Vite
+# ExpenseAI — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React + Vite single-page app for **ExpenseAI**. It talks to the Express/TypeScript API in [`../backend`](../backend) and handles auth with Firebase.
 
-Currently, two official plugins are available:
+> For the full project overview, features, architecture, and setup, see the [main README](../README.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech
 
-## Expanding the ESLint configuration
+`React 19` · `Vite` · `React Router` · `Recharts` · `Firebase Web SDK` · `axios`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# expense-ai
->>>>>>> 87a3344baa1685cbdb257118c6d492f460190592
+## Local development
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
+```
+
+The dev server proxies API calls to the backend running on `http://localhost:5000`, so start the backend first (see the [main README](../README.md#local-setup)).
+
+## Scripts
+
+| Command           | What it does                          |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR    |
+| `npm run build`   | Production build to `dist/`           |
+| `npm run preview` | Preview the production build locally  |
+| `npm run lint`    | Run ESLint over the project           |

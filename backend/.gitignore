@@ -1,9 +1,10 @@
 # Ignore all node_modules folders
 node_modules/
-backend/node_modules/
-frontend/node_modules/
 
-# Ignore all .env files
+# Secrets — NEVER commit these
 .env
-backend/.env
-frontend/.env
+*.env
+!.env.example
+firebaseServiceAccount.json
+*firebase*serviceAccount*.json
+*-service-account*.json

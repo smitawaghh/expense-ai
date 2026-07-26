@@ -1,8 +1,8 @@
-// src/firebase-config.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 
-//  Your Firebase config object
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAENqNuTZXTzoSbEHnLo7XDLzZYlcdmVeo",
   authDomain: "expense-ai-auth.firebaseapp.com",
@@ -13,8 +13,12 @@ const firebaseConfig = {
   measurementId: "G-S8P03F5W2V"
 };
 
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
+// ✅ Add this to fix your error:
+const auth = getAuth(app);
 
-export const auth = getAuth(app);
+// ✅ Export auth so other files (like AuthContext.tsx) can use it:
+export { auth };
