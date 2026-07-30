@@ -9,13 +9,48 @@ const isDev  = process.env.NODE_ENV !== 'production';
 const safe   = (e: unknown) => isDev ? (e as Error).message : 'An error occurred. Please try again.';
 
 const expenseBody = z.object({
-  title:        z.string().min(1, 'Title is required'),
-  amount:       z.coerce.number().positive('Amount must be a positive number'),
-  category:     z.string().optional(),
-  paidTo:       z.string().min(1, 'Paid To is required'),
-  date:         z.coerce.date({ invalid_type_error: 'Date must be a valid date' }),
-  splitWith:    z.string().optional(),
-  splitSettled: z.coerce.boolean().optional(),
+  title: z
+    .string()
+    .trim()
+    .min(2, 'Title must be at least 2 characters')
+    .max(100, 'Title cannot exceed 100 characters'),
+
+  amount: z
+    .coerce
+    .number()
+    .min(1, 'Amount must be at least ₹1')
+    .max(1000000, 'Amount cannot exceed ₹10,00,000'),
+
+  category: z
+    .string()
+    .trim()
+    .optional(),
+
+  paidTo: z
+    .string()
+    .trim()
+    .min(2, 'Paid To must be at least 2 characters')
+    .max(100, 'Paid To cannot exceed 100 characters'),
+
+  date: z
+    .coerce
+    .date({
+      invalid_type_error: 'Date must be a valid date',
+    })
+    .refine((date) => date <= new Date(), {
+      message: 'Future dates are not allowed',
+    }),
+
+  splitWith: z
+    .string()
+    .trim()
+    .max(100, 'Split With cannot exceed 100 characters')
+    .optional(),
+
+  splitSettled: z
+    .coerce
+    .boolean()
+    .optional(),
 });
 
 router.post('/', authenticateUser, async (req: Request, res: Response): Promise<void> => {
