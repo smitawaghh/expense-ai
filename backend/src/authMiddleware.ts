@@ -2,8 +2,10 @@ import type { Request, Response, NextFunction } from 'express';
 import admin from 'firebase-admin';
 
 if (!admin.apps.length) {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const serviceAccount = require('../firebaseServiceAccount.json') as admin.ServiceAccount;
+  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+    ? (JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT) as admin.ServiceAccount)
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    : (require('../firebaseServiceAccount.json') as admin.ServiceAccount);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });

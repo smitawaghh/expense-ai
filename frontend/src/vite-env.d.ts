@@ -1,5 +1,12 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+}
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 /* react-csv ships no type declarations — minimal shim so tsc is happy. */
 declare module 'react-csv' {
   import type { ComponentType, AnchorHTMLAttributes } from 'react';

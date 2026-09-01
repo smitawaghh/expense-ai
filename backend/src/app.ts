@@ -16,7 +16,8 @@ if (!process.env.MONGO_URI) {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim());
+app.use(cors(allowedOrigins ? { origin: allowedOrigins } : undefined));
 app.use(express.json());
 
 const apiLimiter = rateLimit({
