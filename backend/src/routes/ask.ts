@@ -83,7 +83,7 @@ async function callGemini(prompt: string): Promise<string> {
   const { GoogleGenerativeAI } = await import('@google/generative-ai');
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!.trim());
 
-  const models = ['gemini-1.5-flash', 'gemini-2.0-flash'];
+  const models = ['gemini-3.6-flash'];
   let lastErr: any;
 
   for (const modelName of models) {

@@ -161,7 +161,7 @@ export default function AskAI() {
           <p className="page-sub">Your personal finance analyst — analyses last 90 days of data</p>
         </div>
         <div className="ai-badge-header">
-          <Sparkles size={13} /> GPT-4o-mini
+          <Sparkles size={13} /> Gemini 3.6 Flash
         </div>
       </div>
 
