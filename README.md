@@ -2,7 +2,8 @@
 
 **A full-stack personal expense tracker with a multi-provider AI assistant that answers questions about your spending in plain English.**
 
-[Live Demo](#) · [Screenshot below](#screenshot)
+[Live Demo](#) · [Screenshot below](#screenshot)<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/067b616b-36c5-4c18-afa0-a88472f5bea1" />
+
 
 > 📸 _Add a screenshot or GIF of the Dashboard here — recruiters skim images before text._
 
