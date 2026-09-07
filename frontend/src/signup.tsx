@@ -28,9 +28,15 @@ const Signup = () => {
     setLoading(true);
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
-      await sendEmailVerification(cred.user);
-      toast.success('Account created! Verification email sent — check your inbox.');
-      navigate('/verify-email');
+      try {
+        await sendEmailVerification(cred.user);
+        toast.success('Account created! Verification email sent — check your inbox.');
+      } catch {
+        // Account creation succeeded even if the verification email failed to send —
+        // don't block the user from entering the app over an email-delivery hiccup.
+        toast.success('Account created!');
+      }
+      navigate('/');
     } catch (error) {
       toast.error(friendlyAuthError(error));
     } finally {

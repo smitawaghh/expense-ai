@@ -18,12 +18,11 @@ const Login = () => {
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       if (!cred.user.emailVerified) {
-        toast.warning('Please verify your email to continue.');
-        navigate('/verify-email');
+        toast.warning("Welcome back! Your email isn't verified yet — you can verify it anytime from the app.");
       } else {
         toast.success('Welcome back!');
-        navigate('/');
       }
+      navigate('/');
     } catch (error) {
       toast.error(friendlyAuthError(error));
       setLoading(false);
