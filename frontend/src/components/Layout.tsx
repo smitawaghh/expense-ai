@@ -8,11 +8,12 @@ import AboutModal from './AboutModal';
 import Footer from './Footer';
 
 export default function Layout() {
-  const { user } = useAuth();
+  const { user, emailVerified } = useAuth();
   const [sidebarOpen, setSidebar] = useState(window.innerWidth >= 1024);
   const [aboutOpen, setAboutOpen] = useState(false);
 
   if (!user) return <Navigate to="/login" replace />;
+  if (!emailVerified) return <Navigate to="/verify-email" replace />;
 
   return (
     <ExpenseProvider>

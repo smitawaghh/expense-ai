@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { friendlyAuthError } from './lib/firebaseErrors';
 import './App.css';
 
 const Signup = () => {
@@ -26,17 +27,12 @@ const Signup = () => {
 
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      toast.success('Account created! You can now sign in.');
-      navigate('/login');
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(cred.user);
+      toast.success('Account created! Verification email sent — check your inbox.');
+      navigate('/verify-email');
     } catch (error) {
-      const err = error as { code?: string; message?: string };
-      const msg = err.code === 'auth/email-already-in-use'
-        ? 'An account with this email already exists.'
-        : err.code === 'auth/weak-password'
-        ? 'Password is too weak. Use at least 6 characters.'
-        : err.message;
-      toast.error(msg);
+      toast.error(friendlyAuthError(error));
     } finally {
       setLoading(false);
     }
@@ -53,8 +49,9 @@ const Signup = () => {
 
           <form onSubmit={handleSignup}>
             <div className="auth-group">
-              <label>Email</label>
+              <label htmlFor="signup-email">Email</label>
               <input
+                id="signup-email"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
@@ -65,8 +62,9 @@ const Signup = () => {
             </div>
 
             <div className="auth-group">
-              <label>Password</label>
+              <label htmlFor="signup-password">Password</label>
               <input
+                id="signup-password"
                 type="password"
                 placeholder="At least 6 characters"
                 value={password}
@@ -77,8 +75,9 @@ const Signup = () => {
             </div>
 
             <div className="auth-group">
-              <label>Confirm Password</label>
+              <label htmlFor="signup-confirm">Confirm Password</label>
               <input
+                id="signup-confirm"
                 type="password"
                 placeholder="Repeat your password"
                 value={confirm}

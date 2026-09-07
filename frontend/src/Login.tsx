@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebase-config';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { friendlyAuthError } from './lib/firebaseErrors';
 import './App.css';
 
 const Login = () => {
@@ -15,18 +16,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success('Welcome back!');
-      navigate('/');
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      if (!cred.user.emailVerified) {
+        toast.warning('Please verify your email to continue.');
+        navigate('/verify-email');
+      } else {
+        toast.success('Welcome back!');
+        navigate('/');
+      }
     } catch (error) {
-      const err = error as { code?: string; message?: string };
-      const msg =
-        err.code === 'auth/invalid-credential'
-          ? 'Incorrect email or password.'
-          : err.code === 'auth/too-many-requests'
-          ? 'Too many attempts. Please wait a few minutes and try again.'
-          : err.message;
-      toast.error(msg);
+      toast.error(friendlyAuthError(error));
       setLoading(false);
     }
   };
@@ -41,8 +40,9 @@ const Login = () => {
           <h2>Sign in to your account</h2>
           <form onSubmit={handleLogin}>
             <div className="auth-group">
-              <label>Email</label>
+              <label htmlFor="login-email">Email</label>
               <input
+                id="login-email"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
@@ -52,8 +52,9 @@ const Login = () => {
               />
             </div>
             <div className="auth-group">
-              <label>Password</label>
+              <label htmlFor="login-password">Password</label>
               <input
+                id="login-password"
                 type="password"
                 placeholder="••••••••"
                 value={password}
@@ -61,6 +62,11 @@ const Login = () => {
                 required
                 autoComplete="current-password"
               />
+              <div style={{ textAlign: 'right', marginTop: 6 }}>
+                <Link to="/forgot-password" style={{ fontSize: '.78rem', color: 'var(--accent-2)' }}>
+                  Forgot password?
+                </Link>
+              </div>
             </div>
             <button
               type="submit"

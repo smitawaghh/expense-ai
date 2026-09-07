@@ -10,6 +10,8 @@ import Analytics from './pages/Analytics';
 import AskAI from './pages/AskAI';
 import Login from './Login';
 import Signup from './signup';
+import VerifyEmail from './VerifyEmail';
+import ForgotPassword from './ForgotPassword';
 
 export default function App() {
   return (
@@ -19,6 +21,8 @@ export default function App() {
           {/* Auth pages */}
           <Route path="/login"  element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Protected app shell */}
           <Route element={<Layout />}>
